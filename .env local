@@ -1,0 +1,1 @@
+DATABASE_URL="mysql://ressource_rel:ressource_rel@127.0.0.1:3307/ressource_rel?serverVersion=5.7.24"
