@@ -37,9 +37,13 @@ class Comment
     #[ORM\JoinColumn(nullable: false)]
     private ?Resource $resource = null;
 
+    #[ORM\OneToMany(mappedBy: 'comment', targetEntity: Report::class, orphanRemoval: true)]
+    private Collection $reports;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->reports = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -133,6 +137,36 @@ class Comment
     public function setResource(?Resource $resource): static
     {
         $this->resource = $resource;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setComment($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getComment() === $this) {
+                $report->setComment(null);
+            }
+        }
 
         return $this;
     }

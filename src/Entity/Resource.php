@@ -54,9 +54,21 @@ class Resource
     #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'favoris')]
+    private Collection $users;
+
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: Share::class, orphanRemoval: true)]
+    private Collection $shares;
+
+    #[ORM\OneToMany(mappedBy: 'resource', targetEntity: File::class, orphanRemoval: true)]
+    private Collection $files;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->shares = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -208,6 +220,93 @@ class Resource
             // set the owning side to null (unless already changed)
             if ($comment->getResource() === $this) {
                 $comment->setResource(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addFavori($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeFavori($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Share>
+     */
+    public function getShares(): Collection
+    {
+        return $this->shares;
+    }
+
+    public function addShare(Share $share): static
+    {
+        if (!$this->shares->contains($share)) {
+            $this->shares->add($share);
+            $share->setResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShare(Share $share): static
+    {
+        if ($this->shares->removeElement($share)) {
+            // set the owning side to null (unless already changed)
+            if ($share->getResource() === $this) {
+                $share->setResource(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, File>
+     */
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): static
+    {
+        if (!$this->files->contains($file)) {
+            $this->files->add($file);
+            $file->setResource($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFile(File $file): static
+    {
+        if ($this->files->removeElement($file)) {
+            // set the owning side to null (unless already changed)
+            if ($file->getResource() === $this) {
+                $file->setResource(null);
             }
         }
 
