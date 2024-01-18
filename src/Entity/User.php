@@ -47,10 +47,26 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'author', targetEntity: Comment::class, orphanRemoval: true)]
     private Collection $comments;
 
+    #[ORM\ManyToMany(targetEntity: Resource::class, inversedBy: 'users')]
+    private Collection $favoris;
+
+    #[ORM\OneToMany(mappedBy: 'author', targetEntity: Report::class)]
+    private Collection $reports;
+
+    #[ORM\OneToMany(mappedBy: 'share_by', targetEntity: Share::class, orphanRemoval: true)]
+    private Collection $shares;
+
+    #[ORM\ManyToMany(targetEntity: Share::class, mappedBy: 'share_to')]
+    private Collection $shares_to;
+
     public function __construct()
     {
         $this->resources = new ArrayCollection();
         $this->comments = new ArrayCollection();
+        $this->favoris = new ArrayCollection();
+        $this->reports = new ArrayCollection();
+        $this->shares = new ArrayCollection();
+        $this->shares_to = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -226,6 +242,117 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             if ($comment->getAuthor() === $this) {
                 $comment->setAuthor(null);
             }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Resource>
+     */
+    public function getFavoris(): Collection
+    {
+        return $this->favoris;
+    }
+
+    public function addFavori(Resource $favori): static
+    {
+        if (!$this->favoris->contains($favori)) {
+            $this->favoris->add($favori);
+        }
+
+        return $this;
+    }
+
+    public function removeFavori(Resource $favori): static
+    {
+        $this->favoris->removeElement($favori);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Report>
+     */
+    public function getReports(): Collection
+    {
+        return $this->reports;
+    }
+
+    public function addReport(Report $report): static
+    {
+        if (!$this->reports->contains($report)) {
+            $this->reports->add($report);
+            $report->setAuthor($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReport(Report $report): static
+    {
+        if ($this->reports->removeElement($report)) {
+            // set the owning side to null (unless already changed)
+            if ($report->getAuthor() === $this) {
+                $report->setAuthor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Share>
+     */
+    public function getShares(): Collection
+    {
+        return $this->shares;
+    }
+
+    public function addShare(Share $share): static
+    {
+        if (!$this->shares->contains($share)) {
+            $this->shares->add($share);
+            $share->setShareBy($this);
+        }
+
+        return $this;
+    }
+
+    public function removeShare(Share $share): static
+    {
+        if ($this->shares->removeElement($share)) {
+            // set the owning side to null (unless already changed)
+            if ($share->getShareBy() === $this) {
+                $share->setShareBy(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Share>
+     */
+    public function getSharesTo(): Collection
+    {
+        return $this->shares_to;
+    }
+
+    public function addSharesTo(Share $sharesTo): static
+    {
+        if (!$this->shares_to->contains($sharesTo)) {
+            $this->shares_to->add($sharesTo);
+            $sharesTo->addShareTo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSharesTo(Share $sharesTo): static
+    {
+        if ($this->shares_to->removeElement($sharesTo)) {
+            $sharesTo->removeShareTo($this);
         }
 
         return $this;
