@@ -22,7 +22,7 @@ class Resource
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $Content = null;
+    private ?string $content = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $publish_date = null;
@@ -39,7 +39,7 @@ class Resource
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Category $Category = null;
+    private ?Category $category = null;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
@@ -90,12 +90,12 @@ class Resource
 
     public function getContent(): ?string
     {
-        return $this->Content;
+        return $this->content;
     }
 
-    public function setContent(string $Content): static
+    public function setContent(string $content): static
     {
-        $this->Content = $Content;
+        $this->content = $content;
 
         return $this;
     }
@@ -150,12 +150,12 @@ class Resource
 
     public function getCategory(): ?Category
     {
-        return $this->Category;
+        return $this->category;
     }
 
-    public function setCategory(?Category $Category): static
+    public function setCategory(?Category $category): static
     {
-        $this->Category = $Category;
+        $this->category = $category;
 
         return $this;
     }
