@@ -25,13 +25,13 @@ Download repository
 git clone https://github.com/AngryBlackBird/Ressources_C3TE_Back.git
 ```
 
-Dans votre projet, entrez dans le dossier .docker.dev puis lancez votre installation Docker.
+Dans votre projet, entrez dans le dossier `.docker.dev` puis lancez votre installation Docker.
 ```bash
 docker-compose build --no-cache
 docker-compose up -d
 ```
 
-Après l'installation terminée, au sein du dossier .docker.dev, lancez la commande pour entrer dans le conteneur PHP.
+Après l'installation terminée, au sein du dossier `.docker.dev`, lancez la commande pour entrer dans le conteneur PHP.
 ```bash 
 docker-compose exec php bash
 ```
