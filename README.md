@@ -42,6 +42,7 @@ Dans votre conteneur PHP, installez les dépendances de l'application.
 composer install
 php bin/console doctrine:migration:migrate 
 php bin/console doctrine:fixture:load 
+php bin/console lexik:jwt:generate-keypair
 ```
 
 Allez dans votre navigateur et accédez à http://ressource.localhost/api.

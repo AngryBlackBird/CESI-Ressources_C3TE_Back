@@ -29,7 +29,7 @@ class AppFixtures extends Fixture
             $user->setLastName('userLastName_' . $i);
             $user->setFirstName('userFirstName_' . $i);
             $user->setPhone('0701234567');
-            $user->setRoles(['ADMIN']);
+            $user->setRoles(['ROLE_ADMIN']);
             $user->setActive(true);
             $password = $this->hasher->hashPassword($user, 'bonjour');
             $user->setPassword($password);
