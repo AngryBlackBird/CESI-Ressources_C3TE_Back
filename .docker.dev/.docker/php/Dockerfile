@@ -78,7 +78,7 @@ RUN docker-php-ext-install sysvshm
 #    echo "fr_FR.UTF-8 UTF-8" >> /etc/locale.gen && \
 #   locale-gen
 
-#WORKDIR /home/wwwroot/${DOCKER_DIR_PROJECT}
+WORKDIR /home/wwwroot/${DOCKER_DIR_PROJECT}
 
 #ADD . /var/www
 #RUN chown -R www-data:www-data /var/www
