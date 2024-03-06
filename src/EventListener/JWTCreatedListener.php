@@ -3,21 +3,22 @@
 namespace App\EventListener;
 // src/App/EventListener/JWTCreatedListener.php
 
-use App\Entity\User;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 final class JWTCreatedListener
 {
-    private Security $security;
+    /**
+     * @var RequestStack
+     */
+    private $requestStack;
 
     /**
      * @param RequestStack $requestStack
      */
-    public function __construct(Security $security)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->security = $security;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -27,19 +28,15 @@ final class JWTCreatedListener
      */
     public function onJWTCreated(JWTCreatedEvent $event)
     {
-        /**
-         * @var User $currentUser
-         */
-        $currentUser = $this->security->getUser();
-        $payload = $event->getData();
+        $request = $this->requestStack->getCurrentRequest();
 
-        $payload['firstName'] = $currentUser->getFirstName();
-        $payload['lastName'] = $currentUser->getLastName();
-        $payload['id'] = $currentUser->getId();
+        $payload = $event->getData();
+        $payload['ip'] = $request->getClientIp();
 
         $event->setData($payload);
 
         $header = $event->getHeader();
+        $header['cty'] = 'JWT';
 
         $event->setHeader($header);
     }
