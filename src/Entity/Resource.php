@@ -3,11 +3,13 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use App\Enum\EState;
 use App\Repository\ResourceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+
 
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ApiResource]
@@ -33,9 +35,8 @@ class Resource
     #[ORM\Column]
     private ?bool $active = null;
 
-    #[ORM\ManyToOne(inversedBy: 'resources')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?State $state = null;
+    #[ORM\Column]
+    private ?string $state = null;
 
     #[ORM\ManyToOne(inversedBy: 'resources')]
     #[ORM\JoinColumn(nullable: false)]
@@ -69,6 +70,7 @@ class Resource
         $this->users = new ArrayCollection();
         $this->shares = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->setState(EState::PUBLIC);
     }
 
     public function getId(): ?int
@@ -136,14 +138,19 @@ class Resource
         return $this;
     }
 
-    public function getState(): ?State
+    public function getState(): ?EState
     {
-        return $this->state;
+        $cases = EState::cases();
+        foreach ($cases as $case) {
+            if ($case->name === $this->state) return $case;
+        }
+
+        return EState::PRIVATE;
     }
 
-    public function setState(?State $state): static
+    public function setState(EState $state): static
     {
-        $this->state = $state;
+        $this->state = $state->name;
 
         return $this;
     }

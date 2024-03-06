@@ -28,7 +28,6 @@ use Symfony\Component\Serializer\Attribute\Groups;
             read: false,
             name: 'me'
         ),
-
     ],
     normalizationContext: ['groups' => ['read']],
     denormalizationContext: ['groups' => ['write']]

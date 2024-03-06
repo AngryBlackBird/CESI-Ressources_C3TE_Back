@@ -4,8 +4,8 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Resource;
-use App\Entity\State;
 use App\Entity\User;
+use App\Enum\EState;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -33,22 +33,19 @@ class AppFixtures extends Fixture
             $user->setActive(true);
             $password = $this->hasher->hashPassword($user, 'bonjour');
             $user->setPassword($password);
-            $users[]= $user;
+            $users[] = $user;
             $manager->persist($user);
         }
         $category = new Category();
         $category->setName('Catégorie 1');
         $manager->persist($category);
 
-        $state = new State();
-        $state->setName("Un State");
-        $manager->persist($state);
+
 
         for ($i = 0; $i < 10; ++$i) {
             $ressource = new Resource();
             $ressource->setAuthor($users[0]);
             $ressource->setCategory($category);
-            $ressource->setState($state);
             $ressource->setContent("Je suis un contenue __ " . $i);
             $ressource->setTitle("Je suis un titre  __ " . $i);
             $ressource->setPublishDate(new \DateTimeImmutable());
