@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-
 #[ORM\Entity(repositoryClass: ResourceRepository::class)]
 #[ApiResource]
 class Resource
@@ -71,6 +70,12 @@ class Resource
         $this->shares = new ArrayCollection();
         $this->files = new ArrayCollection();
         $this->setState(EState::PUBLIC);
+    }
+
+
+    public function __toString(): string
+    {
+        return $this->title;   // TODO: Implement __toString() method.
     }
 
     public function getId(): ?int
