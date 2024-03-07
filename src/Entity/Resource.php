@@ -2,13 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Doctrine\Odm\Filter\SearchFilter;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use App\Controller\FavoriteResourcesController;
+use App\Controller\CollectionResourcesController;
 use App\Enum\EState;
 use App\Repository\ResourceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -21,16 +22,13 @@ use Doctrine\ORM\Mapping as ORM;
 #[ApiResource(
     operations: [
         new GetCollection(
-            uriTemplate: 'resources/favorite',
-            controller: FavoriteResourcesController::class,
+            controller: CollectionResourcesController::class,
             security: "is_granted('ROLE_USER')",
-            read: false,
-            name: 'favorite',
+            read: false
         ),
     ],
 )]
 #[Get]
-#[GetCollection]
 #[Post]
 #[Put]
 #[Patch]
