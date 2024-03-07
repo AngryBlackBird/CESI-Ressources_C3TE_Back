@@ -3,6 +3,12 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Put;
+use App\Controller\FavoriteResourcesController;
 use App\Enum\EState;
 use App\Repository\ResourceRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -10,8 +16,24 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ResourceRepository::class)]
-#[ApiResource]
+#[
+    ORM\Entity(repositoryClass: ResourceRepository::class)]
+#[ApiResource(
+    operations: [
+        new GetCollection(
+            uriTemplate: 'resources/favorite',
+            controller: FavoriteResourcesController::class,
+            security: "is_granted('ROLE_USER')",
+            read: false,
+            name: 'favorite',
+        ),
+    ],
+)]
+#[Get]
+#[GetCollection]
+#[Post]
+#[Put]
+#[Patch]
 class Resource
 {
     #[ORM\Id]

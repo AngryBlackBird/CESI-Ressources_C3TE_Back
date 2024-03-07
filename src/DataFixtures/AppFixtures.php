@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
         $manager->persist($category);
 
 
-
+        $ressources = [];
         for ($i = 0; $i < 10; ++$i) {
             $ressource = new Resource();
             $ressource->setAuthor($users[0]);
@@ -49,8 +49,15 @@ class AppFixtures extends Fixture
             $ressource->setTitle("Je suis un titre  __ " . $i);
             $ressource->setPublishDate(new \DateTimeImmutable());
             $ressource->setActive(true);
+
             $manager->persist($ressource);
+            $ressources[] = $ressource;
         }
+        $users[0]->addFavori($ressources[0]);
+        $users[0]->addFavori($ressources[1]);
+        $users[0]->addFavori($ressources[2]);
+
+        $manager->persist($users[0]);
 
         $manager->flush();
     }
