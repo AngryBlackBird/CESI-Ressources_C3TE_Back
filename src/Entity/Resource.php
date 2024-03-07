@@ -23,7 +23,6 @@ use Doctrine\ORM\Mapping as ORM;
     operations: [
         new GetCollection(
             controller: CollectionResourcesController::class,
-            security: "is_granted('ROLE_USER')",
             read: false
         ),
     ],

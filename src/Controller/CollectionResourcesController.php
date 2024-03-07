@@ -30,7 +30,7 @@ class CollectionResourcesController extends AbstractController
             $queryBuilder->expr()->eq('r.author', ':current_user')
         ))
             ->setParameter('state', EState::PUBLIC->name)
-            ->setParameter('current_user', $user->getId());
+            ->setParameter('current_user', $user?->getId());
 
         return $queryBuilder->getQuery()->getResult();
     }
