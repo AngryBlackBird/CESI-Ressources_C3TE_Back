@@ -7,16 +7,19 @@ use App\Entity\Resource;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Faker\Factory;
+use Faker\Generator;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
-
+    protected Generator $faker;
     private UserPasswordHasherInterface $hasher;
 
     public function __construct(UserPasswordHasherInterface $hasher)
     {
         $this->hasher = $hasher;
+        $this->faker = Factory::create();
     }
 
     public function load(ObjectManager $manager): void
@@ -25,9 +28,9 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < 10; ++$i) {
             $user = new User();
             $user->setEmail('email' . $i . '@email.fr');
-            $user->setLastName('userLastName_' . $i);
-            $user->setFirstName('userFirstName_' . $i);
-            $user->setPhone('0701234567');
+            $user->setLastName($this->faker->lastName);
+            $user->setFirstName($this->faker->firstName);
+            $user->setPhone('076697444');
             $user->setRoles(['ROLE_ADMIN']);
             $user->setActive(true);
             $password = $this->hasher->hashPassword($user, 'bonjour');
@@ -36,7 +39,7 @@ class AppFixtures extends Fixture
             $manager->persist($user);
         }
         $category = new Category();
-        $category->setName('Catégorie 1');
+        $category->setName($this->faker->title);
         $manager->persist($category);
 
 
@@ -45,10 +48,10 @@ class AppFixtures extends Fixture
             $ressource = new Resource();
             $ressource->setAuthor($users[0]);
             $ressource->setCategory($category);
-            $ressource->setContent("Je suis un contenue __ " . $i);
-            $ressource->setTitle("Je suis un titre  __ " . $i);
+            $ressource->setContent($this->faker->text(500));
+            $ressource->setTitle($this->faker->text(15));
             $ressource->setPublishDate(new \DateTimeImmutable());
-            $ressource->setActive(true);
+            $ressource->setActive($this->faker->boolean(70));
 
             $manager->persist($ressource);
             $ressources[] = $ressource;
