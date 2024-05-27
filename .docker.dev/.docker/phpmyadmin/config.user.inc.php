@@ -1,2 +1,0 @@
-<?php
-$cfg['ForceSSL'] = true;
