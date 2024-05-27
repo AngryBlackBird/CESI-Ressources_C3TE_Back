@@ -3,12 +3,12 @@ include $(env)
 export $(shell sed 's/=.*//' $(env))
 
 install:
-	docker-compose build --no-cache
-	docker-compose up -d
+	docker compose build --no-cache
+	docker compose up -d
 
 rebuild:
-	docker-compose build --no-cache
-	docker-compose up -d
+	docker compose build --no-cache
+	docker compose up -d
 
 start:
 	docker-compose up -d
